@@ -1,6 +1,5 @@
-// src/mocks/handlers.js
+// src/mocks/handlers
 import { http, HttpResponse } from 'msw'
-// src/mocks/handlers.js
 
 export const handlers = [
   // Intercept "GET https://example.com/user" requests...
