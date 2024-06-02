@@ -2,15 +2,24 @@ import { useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
+import { useCustomQuery } from './common/hooks/useCustomQuery.ts'
 
 function App() {
   const [count, setCount] = useState(0)
 
-  fetch('/user').then(console.log)
+  const config = {
+    url: '/user',
+    method: 'get',
+  }
+  const query = useCustomQuery({
+    queryKey: ['user'],
+    config,
+  })
   return (
     <>
       <div>
-        <h1>kalina</h1>
+        <h1>{query?.isLoading ? 'loading' : query?.data?.firstName}</h1>
+
         <a href="https://vitejs.dev" target="_blank">
           <img src={viteLogo} className="logo" alt="Vite logo" />
         </a>
