@@ -1,6 +1,6 @@
-import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App.tsx'
+import { renderWithProvider } from './renderWithProvider.tsx'
 import './index.css'
 
 if (process.env.NODE_ENV === 'development' || process.env.REACT_APP_MSW) {
@@ -13,7 +13,5 @@ if (process.env.NODE_ENV === 'development' || process.env.REACT_APP_MSW) {
 }
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
+  renderWithProvider(App),
 )
