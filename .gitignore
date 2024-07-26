@@ -1,3 +1,11 @@
+node_modules
+dist
+dist-ssr
+*.local
+
+# build tools
+.svelte-kit
+
 # Logs
 logs
 *.log
@@ -7,10 +15,8 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-node_modules
-dist
-dist-ssr
-*.local
+# cache
+.eslintcache
 
 # Editor directories and files
 .vscode/*
