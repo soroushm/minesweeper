@@ -15,4 +15,8 @@ export default defineConfig({
       resolveBrowser: false,
     }),
   ],
+  build: {
+    outDir: './build',
+    emptyOutDir: true,
+  },
 })
