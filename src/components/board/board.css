@@ -1,0 +1,52 @@
+.board {
+  display: flex;
+  border: 4px outset #fff;
+  margin: 4px;
+  padding: 8px;
+  flex-direction: column;
+  background-color: #ddd;
+}
+
+.board .header {
+  border: 4px inset #fff;
+  background-color: #ddd;
+  margin-bottom: 8px;
+  padding: 4px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.field {
+  display: flex;
+  border: 4px inset #fff;
+  padding: 0;
+  flex-direction: row;
+  align-items: center;
+  align-self: center;
+}
+
+.field .row {
+  flex-direction: column;
+}
+
+.field .cell {
+  width: 28px;
+  height: 28px;
+  font-size: 18px;
+  line-height: 30px;
+  border: 4px outset #fff;
+  background-color: #ddd;
+  align-items: center;
+  justify-content: center;
+  color: #000;
+  font-weight: bold;
+  padding: 0;
+  margin: 0;
+}
+
+.field .cell.revealed {
+  transition: 250ms;
+  background-color: #ccc;
+  border: 2px solid #bbb;
+}
