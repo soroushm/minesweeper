@@ -1,5 +1,5 @@
 import { http, HttpResponse } from 'msw'
-import { generateMinesweeperGrid } from '/src/utils/generateMinesweeperGrid'
+import { generateMinesweeperGrid } from '../../../utils/generateMinesweeperGrid'
 
 export const board = http.get('/board', () =>
   HttpResponse.json({
