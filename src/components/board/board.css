@@ -21,13 +21,13 @@
   display: flex;
   border: 4px inset #fff;
   padding: 0;
-  flex-direction: row;
+  flex-direction: column;
   align-items: center;
   align-self: center;
 }
 
 .field .row {
-  flex-direction: column;
+  flex-direction: row;
 }
 
 .field .cell {
