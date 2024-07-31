@@ -11,10 +11,15 @@ function Observer() {
 export const Board = () => {
   const config = {
     url: '/Board',
-    method: 'get',
+    method: 'post',
+    data: {
+      cells: 9,
+      rows: 9,
+      mines: 10,
+    },
   }
   const query = useCustomQuery({
-    queryKey: ['index.ts'],
+    queryKey: ['board'],
     config,
   })
   return (
@@ -24,7 +29,7 @@ export const Board = () => {
         <Observer />
         <TimerCounter />
       </div>
-      <MineField field={query?.data} />
+      <MineField key={query?.data?.id} field={query?.data} />
     </div>
   )
 }
