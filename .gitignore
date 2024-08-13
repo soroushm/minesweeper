@@ -4,8 +4,6 @@ build
 dist-ssr
 *.local
 
-# build tools
-.svelte-kit
 
 # Logs
 logs
