@@ -17,13 +17,6 @@ export class IndexedDB {
     return IndexedDB.instance
   }
 
-  public static getInstance(dbName: string, tableName: string): IndexedDB {
-    if (!IndexedDB.instance) {
-      IndexedDB.instance = new IndexedDB(dbName, tableName)
-    }
-    return IndexedDB.instance
-  }
-
   private openDatabase(): Promise<IDBDatabase> {
     return new Promise((resolve, reject) => {
       if (this.db) {
