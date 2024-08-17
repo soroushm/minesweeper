@@ -1,13 +1,42 @@
 import { http, HttpResponse } from 'msw'
-import {
-  generateMinesweeperGrid,
-  type Options as GenerateOptions,
-} from '../../../utils/generateMinesweeperGrid'
+import { type Options as GenerateOptions } from '../../../utils/generateMinesweeperGrid'
+import MineField from '../../../utils/mineField'
+import { isEmpty } from '../../../utils/isEmpty.ts'
 
-export const board = http.post('/board', async ({ request }) => {
+export const newBoard = http.post('/board/new', async ({ request }) => {
   const options = (await request?.json()) as GenerateOptions
-  return HttpResponse.json({
-    id: 'c7b3d8e0-5e0b-4b0f-8b3a-3b9f4b3d3b3d',
-    rows: generateMinesweeperGrid(options),
-  })
+  const board = await MineField.newField(options)
+  return HttpResponse.json(board)
+})
+
+export const updateBoard = http.post('/board/:id', async ({ request }) => {
+  console.error('method not implemented', await request?.json())
+  // const options = (await request?.json()) as GenerateOptions
+  // const board = await MineField.newField(options)
+  // return HttpResponse.json(board)
+})
+
+export const getBoard = http.get('/board/:id', async ({ params }) => {
+  try {
+    if (!params?.id) {
+      return new HttpResponse(null, {
+        status: 204,
+        statusText: `board id is required ${params.id}`,
+      })
+    }
+    const board = await MineField.getBoard(params?.id)
+    if (isEmpty(board)) {
+      return new HttpResponse(null, {
+        status: 404,
+        statusText: 'board is not defined',
+      })
+    }
+    return HttpResponse.json(board)
+  } catch (e: unknown) {
+    const statusText = e instanceof Error ? e.message : 'somethings went wrong'
+    return new HttpResponse(null, {
+      status: 500,
+      statusText,
+    })
+  }
 })
