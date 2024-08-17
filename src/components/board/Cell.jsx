@@ -1,3 +1,3 @@
-export const Cell = ({ cell }) => {
-  return <div className="cell">{cell < 0 ? '*' : cell || ''}</div>
+export const Cell = ({ cell: [value, isRevealed] }) => {
+  return <div className="cell">{!isRevealed ? '' : value < 0 ? '*' : value || ''}</div>
 }
