@@ -1,5 +1,12 @@
-export class IndexedDB {
-  private static instance: IndexedDB
+i // interface ObjectStore {
+//   id: string // UUID v7 or any UUID in string format
+//   [key: string]: any // Additional properties with string keys and any type values
+// }
+type ID = string
+interface DB {
+  id: ID
+}
+export class IndexedDB<ObjectStore extends DB> {
   private db: IDBDatabase | null = null
   private dbName: string
   private tableName: string
@@ -8,13 +15,6 @@ export class IndexedDB {
   constructor(dbName: string, tableName: string) {
     this.dbName = dbName
     this.tableName = tableName
-
-    if (!IndexedDB.instance) {
-      IndexedDB.instance = this
-      this.openDatabase().catch(console.error)
-    }
-
-    return IndexedDB.instance
   }
 
   private openDatabase(): Promise<IDBDatabase> {
@@ -55,28 +55,22 @@ export class IndexedDB {
     })
   }
 
-  public async addGrid(grid: number[][]): Promise<number> {
+  public async addObj(obj: ObjectStore): Promise<number> {
     try {
       const db = await this.ensureDb() // Ensure DB is opened and non-null
 
       const transaction = db.transaction([this.tableName], 'readwrite')
       const objectStore = transaction.objectStore(this.tableName)
-      const request = objectStore.add({ grid })
+      const request = objectStore.add(obj)
 
       return new Promise((resolve, reject) => {
         request.onsuccess = (event) => {
-          console.log(
-            'Grid stored successfully with ID:',
-            (event.target as IDBRequest).result,
-          )
+          console.log('Grid stored successfully with ID:', (event.target as IDBRequest).result)
           resolve((event.target as IDBRequest).result as number)
         }
 
         request.onerror = (event) => {
-          console.error(
-            'Error storing grid:',
-            (event.target as IDBRequest).error,
-          )
+          console.error('Error storing grid:', (event.target as IDBRequest).error)
           reject((event.target as IDBRequest).error)
         }
       })
@@ -85,7 +79,7 @@ export class IndexedDB {
     }
   }
 
-  public async getGrid(id: number): Promise<number[][] | null> {
+  public async getObj(id: ID): Promise<ObjectStore> {
     try {
       const db = await this.ensureDb() // Ensure DB is opened and non-null
 
@@ -96,8 +90,8 @@ export class IndexedDB {
       return new Promise((resolve, reject) => {
         request.onsuccess = (event) => {
           if (request.result) {
-            console.log('Retrieved grid:', request.result.grid, event)
-            resolve(request.result.grid)
+            console.log('Retrieved grid:', request.result, event)
+            resolve(request.result)
           } else {
             console.log('Grid not found')
             resolve(null)
@@ -105,10 +99,7 @@ export class IndexedDB {
         }
 
         request.onerror = (event) => {
-          console.error(
-            'Error retrieving grid:',
-            (event.target as IDBRequest).error,
-          )
+          console.error('Error retrieving grid:', (event.target as IDBRequest).error)
           reject((event.target as IDBRequest).error)
         }
       })
@@ -117,7 +108,7 @@ export class IndexedDB {
     }
   }
 
-  public async updateGrid(id: number, newGrid: number[][]): Promise<boolean> {
+  public async updateObj({ id, ...data }: ObjectStore): Promise<boolean> {
     try {
       const db = await this.ensureDb() // Ensure DB is opened and non-null
 
@@ -129,7 +120,7 @@ export class IndexedDB {
       return new Promise((resolve, reject) => {
         existingRecordRequest.onsuccess = (event) => {
           if (existingRecordRequest.result) {
-            const updateRequest = objectStore.put({ id, grid: newGrid })
+            const updateRequest = objectStore.put(data)
 
             updateRequest.onsuccess = () => {
               console.log(`Grid with ID ${id} updated successfully.`, event)
@@ -137,10 +128,7 @@ export class IndexedDB {
             }
 
             updateRequest.onerror = (event) => {
-              console.error(
-                'Error updating grid:',
-                (event.target as IDBRequest).error,
-              )
+              console.error('Error updating grid:', (event.target as IDBRequest).error)
               reject((event.target as IDBRequest).error)
             }
           } else {
@@ -150,10 +138,7 @@ export class IndexedDB {
         }
 
         existingRecordRequest.onerror = (event) => {
-          console.error(
-            'Error fetching grid for update:',
-            (event.target as IDBRequest).error,
-          )
+          console.error('Error fetching grid for update:', (event.target as IDBRequest).error)
           reject((event.target as IDBRequest).error)
         }
       })
@@ -170,5 +155,3 @@ export class IndexedDB {
     }
   }
 }
-
-export default new IndexedDB('MinesweeperDB', 'minesweeperGrids')
