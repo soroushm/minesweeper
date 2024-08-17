@@ -1,4 +1,4 @@
-i // interface ObjectStore {
+// interface ObjectStore {
 //   id: string // UUID v7 or any UUID in string format
 //   [key: string]: any // Additional properties with string keys and any type values
 // }
