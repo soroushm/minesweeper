@@ -20,14 +20,11 @@ module.exports = {
     'prettier/prettier': [
       'error',
       {
-        printWidth: 120,
+        printWidth: 100,
       },
     ],
     '@typescript-eslint/no-explicit-any': 'off',
-    'react-refresh/only-export-components': [
-      'warn',
-      { allowConstantExport: true },
-    ],
-    'max-len': ['error', { code: 120 }],
+    'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
+    'max-len': ['error', { code: 100 }],
   },
 }
