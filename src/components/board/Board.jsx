@@ -10,7 +10,7 @@ function Observer() {
 
 export const Board = () => {
   const config = {
-    url: '/Board',
+    url: '/Board/new',
     method: 'post',
     data: {
       cells: 9,
@@ -29,7 +29,7 @@ export const Board = () => {
         <Observer />
         <TimerCounter />
       </div>
-      <MineField key={query?.data?.id} field={query?.data} />
+      <MineField key={query?.data?.id} field={query?.data?.field} />
     </div>
   )
 }
