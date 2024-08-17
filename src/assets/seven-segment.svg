@@ -10,7 +10,7 @@
  </defs>
  <rect class="background" width="4.50183" height="8.61276"/>
   <g id="seven-segment">
-   <polygon id="top" class="off" points="0.156546,0.000883515 1.39867,1.21768 3.11825,1.21761 4.34529,0 "/>
+   <polygon id="top" class="on" points="0.156546,0.000883515 1.39867,1.21768 3.11825,1.21761 4.34529,0 "/>
    <polygon id="bottom" class="off" points="0.156546,8.61188 1.39867,7.39508 3.11825,7.39515 4.34529,8.61276 "/>
     <polygon id="right_bottom" class="off" points="4.50095,8.49516 3.28415,7.25303 3.28422,5.53345 4.50183,4.30641 "/>
     <polygon id="right_top" class="off" points="4.50095,4.30632 3.28415,3.06419 3.28422,1.34461 4.50183,0.117573 "/>

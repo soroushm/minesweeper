@@ -1,9 +1,9 @@
-import { SevenSegment } from '../../common/components/seven-segment'
+import { Display } from '../../common/components/Display'
 
 export const MinesCounter = () => {
   return (
     <div className="minesCounter">
-      <SevenSegment />
+      <Display digits="010" />
     </div>
   )
 }
