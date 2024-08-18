@@ -10,7 +10,7 @@ function Observer() {
 
 export const Board = () => {
   const config = {
-    url: '/Board/new',
+    url: '/board/new',
     method: 'post',
     data: {
       cells: 9,

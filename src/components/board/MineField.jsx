@@ -3,8 +3,8 @@ import { Row } from './Row.jsx'
 export const MineField = ({ field: rows }) => {
   return (
     <div className="field">
-      {rows?.map((row, key) => (
-        <Row kay={key} cells={row} rowIndex={key} />
+      {rows?.map((row, y) => (
+        <Row kay={y} cells={row} y={y} />
       ))}
     </div>
   )

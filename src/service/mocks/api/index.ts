@@ -1,6 +1,6 @@
 import { http, HttpResponse } from 'msw'
 import { type Options as GenerateOptions } from '../../../utils/generateMinesweeperGrid'
-import MineField from '../../../utils/mineField'
+import MineField, { type Update } from '../../../utils/mineField'
 import { isEmpty } from '../../../utils/isEmpty.ts'
 
 export const newBoard = http.post('/board/new', async ({ request }) => {
@@ -9,31 +9,58 @@ export const newBoard = http.post('/board/new', async ({ request }) => {
   return HttpResponse.json(board)
 })
 
-export const updateBoard = http.post('/board/:id', async ({ request }) => {
-  console.error('method not implemented', await request?.json())
-  // const options = (await request?.json()) as GenerateOptions
-  // const board = await MineField.newField(options)
-  // return HttpResponse.json(board)
-})
-
-export const getBoard = http.get('/board/:id', async ({ params }) => {
+export const updateBoard = http.post<Params, Update>(
+  '/board/:id',
+  async ({ request, params: { id } }) => {
+    try {
+      id = Array.isArray(id) ? id[0] : id
+      if (!id) {
+        return new HttpResponse(null, {
+          status: 400,
+          statusText: `Board ID is required. Provided value: ${id}`,
+        })
+      }
+      console.error('method not implemented', request, id)
+      const { position, actions } = await request.json()
+      console.log('position', position)
+      const changes = await MineField.update(id, { position, actions })
+      if (isEmpty(changes)) {
+        return new HttpResponse(null, {
+          status: 404,
+          statusText: 'Board is not defined',
+        })
+      }
+      return HttpResponse.json(changes)
+    } catch (e: unknown) {
+      const statusText = e instanceof Error ? e.message : 'Somethings went wrong'
+      return new HttpResponse(null, {
+        status: 500,
+        statusText,
+      })
+    }
+  },
+)
+interface Params {
+  id: string
+}
+export const getBoard = http.get<Params>('/board/:id', async ({ params }) => {
   try {
     if (!params?.id) {
       return new HttpResponse(null, {
-        status: 204,
-        statusText: `board id is required ${params.id}`,
+        status: 400,
+        statusText: `Board ID is required. Provided value: ${params.id}`,
       })
     }
-    const board = await MineField.getBoard(params?.id)
+    const board = await MineField.getBoard(params.id)
     if (isEmpty(board)) {
       return new HttpResponse(null, {
         status: 404,
-        statusText: 'board is not defined',
+        statusText: 'Board is not defined',
       })
     }
     return HttpResponse.json(board)
   } catch (e: unknown) {
-    const statusText = e instanceof Error ? e.message : 'somethings went wrong'
+    const statusText = e instanceof Error ? e.message : 'Somethings went wrong'
     return new HttpResponse(null, {
       status: 500,
       statusText,

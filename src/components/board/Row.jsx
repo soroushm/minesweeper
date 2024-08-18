@@ -1,9 +1,9 @@
 import { Cell } from './Cell.jsx'
-export const Row = ({ cells, rowIndex }) => {
+export const Row = ({ cells, y }) => {
   return (
     <div className="row">
-      {cells.map((cell, key) => (
-        <Cell key={`${key}:${rowIndex}`} cell={cell} />
+      {cells.map((cell, x) => (
+        <Cell key={`${y}:${x}`} cell={cell} position={{ x, y }} />
       ))}
     </div>
   )
