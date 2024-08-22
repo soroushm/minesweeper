@@ -6,14 +6,14 @@ const defaultParams = {
   rows: 9,
   mines: 10,
 }
-export const useBoardQuery = (id?: string, params: Params = defaultParams) => {
+export const useBoardQuery = (id: string, params: Params = defaultParams) => {
   const config = {
-    url: `/board/${id || 'new'}`,
+    url: `/board/${id}`,
     method: 'get',
     params,
   }
   return useCustomQuery<Board>({
-    queryKey: ['board', id || 'new'],
+    queryKey: ['board', id],
     config,
   })
 }

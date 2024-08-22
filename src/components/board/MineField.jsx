@@ -1,9 +1,10 @@
 import { Row } from './Row.jsx'
 
-export const MineField = ({ field: rows }) => {
+export const MineField = ({ data }) => {
+  const { field } = data
   return (
     <div className="field">
-      {rows?.map((row, y) => (
+      {field?.map((row, y) => (
         <Row kay={y} cells={row} y={y} />
       ))}
     </div>

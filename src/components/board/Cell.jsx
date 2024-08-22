@@ -1,6 +1,9 @@
 import { useCallback } from 'react'
+import { useBoardMutation } from '../../common/hooks/useBoardMutation'
 
 export const Cell = ({ cell: [value, isRevealed, isFlagged], position }) => {
+  if (value) console.log('value', value, isRevealed, isFlagged)
+  const { mutate } = useBoardMutation()
   const onclick = useCallback(
     (event, hasRevealed = false, hasFlagged = false) => {
       event.preventDefault()
@@ -8,20 +11,12 @@ export const Cell = ({ cell: [value, isRevealed, isFlagged], position }) => {
         return
       }
       const actions = [hasRevealed, hasFlagged]
-      console.log('click', position, actions)
-      const postData = {
+      mutate({
         position: [position.x, position.y],
         actions,
-      }
-      fetch('http://localhost:5173/board/01916301-64b1-788c-b230-872404d5bbce', {
-        method: 'POST', // Specify the HTTP method
-        headers: {
-          'Content-Type': 'application/json', // Indicate that we're sending JSON data
-        },
-        body: JSON.stringify(postData), // Convert the data to a JSON string
       })
     },
-    [isRevealed, isFlagged, position],
+    [isRevealed, isFlagged, position, mutate],
   )
   return (
     <div

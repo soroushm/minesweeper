@@ -17,7 +17,7 @@ export const Board = () => {
         <Observer />
         <TimerCounter />
       </div>
-      <MineField key={data?.id} field={data?.field} />
+      <MineField key={data?.id} data={data || {}} />
     </div>
   )
 }
