@@ -10,7 +10,11 @@ export const Display = ({ digits, max = 3 }: Display) => {
   //@todo left pad is required
   return (
     <div className="display">
-      {value.split('').map((digit, index) => index < max && <SevenSegment digit={digit} />)}
+      {value
+        .split('')
+        .map(
+          (digit, index) => index < max && <SevenSegment key={`${digit}:${index}`} digit={digit} />,
+        )}
     </div>
   )
 }
