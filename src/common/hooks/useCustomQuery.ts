@@ -16,16 +16,14 @@ export const useCustomQuery: <T>({
 }: UseCustomQueryParams) => UseQueryResult<T> = <T>({
   queryKey,
   config = {},
-  options = {},
+  options = {
+    staleTime: Infinity,
+  },
   client = defaultClient,
 }: UseCustomQueryParams): UseQueryResult<T> => {
   return useQuery({
     ...options,
-    queryKey: [
-      ...queryKey,
-      config,
-      // client.host (if needed)
-    ],
+    queryKey,
     queryFn: async (): Promise<T> => client.call<T>({ ...config }),
   })
 }
