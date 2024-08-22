@@ -2,22 +2,16 @@ import { v7 } from 'uuid'
 import {
   generateMinesweeperGrid,
   type Options as GenerateOptions,
-  type Field,
   type Cell,
   type Position,
   type Actions,
-} from './generateMinesweeperGrid.ts'
+  type Board,
+} from './generateMinesweeperGrid'
 import { IndexedDB } from '../service/db/IndexedDB.ts'
 import { transformCellForClient } from './transformFieldForClient.ts'
 import { isEmpty } from './isEmpty.ts'
 import { revealMinesweeperGrid } from './revealMinesweeperGrid.ts'
 
-export interface Board {
-  id: string
-  options: GenerateOptions
-  field: Field
-  start: string | null
-}
 export interface Update {
   position: Position
   actions: Actions

@@ -1,10 +1,11 @@
 import { http, HttpResponse } from 'msw'
-import { type Options as GenerateOptions } from '../../../utils/generateMinesweeperGrid'
 import MineField, { type Update } from '../../../utils/mineField'
 import { isEmpty } from '../../../utils/isEmpty.ts'
+import qs from 'query-string'
 
-export const newBoard = http.post('/board/new', async ({ request }) => {
-  const options = (await request?.json()) as GenerateOptions
+export const newBoard = http.get('/board/new', async ({ request }) => {
+  const url = new URL(request.url)
+  const options = qs.parse(url.search)
   const board = await MineField.newField(options)
   return HttpResponse.json(board)
 })
@@ -43,6 +44,12 @@ export const updateBoard = http.post<Params, Update>(
 interface Params {
   id: string
 }
+
+// export const getBoard = http.get('/board/:id', async ({ request }) => {
+//   const options = (await request?.json()) as GenerateOptions
+//   const board = await MineField.getBoard(options?.id)
+//   return HttpResponse.json(board)
+// })
 export const getBoard = http.get<Params>('/board/:id', async ({ params }) => {
   try {
     if (!params?.id) {

@@ -1,11 +1,7 @@
 import { getRandomInt } from './getRandomInt'
 import { directions } from './consts'
 import { toNumber } from './toNumber'
-export interface Options {
-  rows: number
-  cells: number
-  mines: number
-}
+
 export type HasRevealed = boolean
 export type HasFlag = boolean
 export type MinesCount = number // -1 | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8
@@ -15,6 +11,17 @@ export type Cell = [MinesCount, HasRevealed, HasFlag]
 export type Field = Array<Array<Cell>>
 export type Position = [X, Y]
 export type Actions = [HasRevealed, HasFlag]
+export interface Options {
+  rows: number
+  cells: number
+  mines: number
+}
+export interface Board {
+  id: string
+  options: Options
+  field: Field
+  start: string | null
+}
 
 export const generateMinesweeperGrid = (
   { cells = 9, rows = 9, mines = 8 }: Options,
