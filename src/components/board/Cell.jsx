@@ -2,7 +2,6 @@ import { useCallback } from 'react'
 import { useBoardMutation } from '../../common/hooks/useBoardMutation'
 
 export const Cell = ({ cell: [value, isRevealed, isFlagged], position }) => {
-  if (value) console.log('value', value, isRevealed, isFlagged)
   const { mutate } = useBoardMutation()
   const onclick = useCallback(
     (event, hasRevealed = false, hasFlagged = false) => {
