@@ -1,21 +1,21 @@
 interface Snapshot {
   [storeName: string]: any[]
 }
-
-async function getDatabaseSnapshot(dbName: string, storeNames: string[]): Promise<Snapshot> {
-  try {
-    const db = await openDatabase(dbName)
-    const snapshot: Snapshot = {}
-
-    for (const storeName of storeNames) {
-      snapshot[storeName] = await getAllFromStore(db, storeName)
-    }
-
-    return snapshot
-  } catch (error) {
-    throw new Error(`Failed to get database snapshot: ${error.message}`)
-  }
-}
+//
+// async function getDatabaseSnapshot(dbName: string, storeNames: string[]): Promise<Snapshot> {
+//   try {
+//     const db = await openDatabase(dbName)
+//     const snapshot: Snapshot = {}
+//
+//     for (const storeName of storeNames) {
+//       snapshot[storeName] = await getAllFromStore(db, storeName)
+//     }
+//
+//     return snapshot
+//   } catch (error) {
+//     throw new Error(`Failed to get database snapshot: ${error.message}`)
+//   }
+// }
 
 function openDatabase(dbName: string): Promise<IDBDatabase> {
   return new Promise((resolve, reject) => {

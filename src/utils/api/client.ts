@@ -1,4 +1,4 @@
-import { type AxiosInstance, type AxiosRequestConfig } from 'axios'
+import { type AxiosInstance, type AxiosRequestConfig, type AxiosResponse } from 'axios'
 import { createRequest } from './request'
 import { BASE_URL } from '../../config.ts'
 
@@ -33,16 +33,17 @@ export class Client {
     })
   }
 
-  call = async <T>({
-    transformResult = async (data: any): Promise<T> => data,
+  call = async <TData>({
+    transformResult = async (data: AxiosResponse<TData, any>): Promise<AxiosResponse<TData, any>> =>
+      data,
     ...args
-  }: Args): Promise<T> => {
+  }: Args): Promise<TData> => {
     if (!this.fetch) {
       throw new Error('Fetch is not initialized')
     }
-    const response = await this.fetch<T>(args)
+    const response = await this.fetch<TData>(args)
     const result = await transformResult(response)
-    return result.data as T
+    return result.data
   }
 
   create(option: Option = {}): void {

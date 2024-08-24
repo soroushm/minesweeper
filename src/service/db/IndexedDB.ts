@@ -88,11 +88,7 @@ export class IndexedDB<ObjectStore extends DB> {
 
       return new Promise((resolve, reject) => {
         request.onsuccess = () => {
-          if (request.result) {
-            resolve(request.result)
-          } else {
-            resolve(null)
-          }
+          resolve(request?.result)
         }
 
         request.onerror = (event) => {
@@ -115,7 +111,7 @@ export class IndexedDB<ObjectStore extends DB> {
       const existingRecordRequest = objectStore.get(data.id)
 
       return new Promise((resolve, reject) => {
-        existingRecordRequest.onsuccess = (event) => {
+        existingRecordRequest.onsuccess = () => {
           if (existingRecordRequest.result) {
             const updateRequest = objectStore.put(data)
 

@@ -2,10 +2,16 @@ import { http, HttpResponse } from 'msw'
 import MineField, { type Update } from '../../../utils/mineField'
 import { isEmpty } from '../../../utils/isEmpty.ts'
 import qs from 'query-string'
+import { type Options } from '../../../utils/generateMinesweeperGrid'
 
 export const newBoard = http.get('/board/new', async ({ request }) => {
   const url = new URL(request.url)
-  const options = qs.parse(url.search)
+  const queryParams = qs.parse(url.search)
+  const options: Options = {
+    rows: parseInt(queryParams.rows as string, 10),
+    cells: parseInt(queryParams.cells as string, 10),
+    mines: parseInt(queryParams.mines as string, 10),
+  }
   const board = await MineField.newField(options)
   return HttpResponse.json(board)
 })
@@ -21,9 +27,7 @@ export const updateBoard = http.post<Params, Update>(
           statusText: `Board ID is required. Provided value: ${id}`,
         })
       }
-      console.error('method not implemented', request, id)
       const { position, actions } = await request.json()
-      console.log('position', position)
       const changes = await MineField.update(id, { position, actions })
       if (isEmpty(changes)) {
         return new HttpResponse(null, {

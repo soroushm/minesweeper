@@ -19,7 +19,12 @@ export interface Update {
 class MineField {
   private db = new IndexedDB<Board>('MinesweeperDB', 'minesweeperGrids')
 
-  async newField(options: GenerateOptions) {
+  async newField(params: GenerateOptions) {
+    const options = {
+      cells: params?.cells || 9,
+      rows: params?.rows || 9,
+      mines: params?.mines || 8,
+    }
     const board = {
       id: v7(),
       options,
@@ -50,14 +55,16 @@ class MineField {
 
     const [revealed, flag] = actions
     const [selectedCell, selectedRow] = position
+    const x = Number(selectedCell)
+    const y = Number(selectedRow)
     if (revealed) {
       newBord.field = revealMinesweeperGrid(newBord.field, board.options, position)
-      const isHitMine = newBord.field[selectedRow][selectedCell][0] === -1
+      const isHitMine = newBord.field[y][x][0] === -1
       if (isHitMine) {
         newBord.end = new Date().toISOString()
       }
     } else if (flag !== null) {
-      newBord.field[selectedRow][selectedCell][2] = flag
+      newBord.field[y][x][2] = flag
     }
 
     await this.db.updateObj(newBord)

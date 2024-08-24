@@ -29,7 +29,9 @@ export interface Board {
 export const countMine = (field: Field, [cell, row]: Position, options: Options): number => {
   let mineCount = 0
   processNeighboringCells([cell, row], options, ([selectedCell, selectedRow]) => {
-    const isMine = field[selectedRow][selectedCell][0] === -1
+    const x = Number(selectedCell)
+    const y = Number(selectedRow)
+    const isMine = field[y][x][0] === -1
     if (isMine) {
       mineCount++
     }
@@ -43,7 +45,7 @@ export const createField = (rows: number, cells: number): Field => {
   })
 }
 export const generateMinesweeperGrid = (
-  options: Options = { cells: 9, rows: 9, mines: 8 },
+  options: Options,
   [x, y]: Position | [] = [],
   [hasRevealed, hasFlag]: Actions | [] = [],
 ) => {
@@ -77,8 +79,10 @@ export const generateMinesweeperGrid = (
       field[row][cell][0] = -1
       ++minesPlaced
       processNeighboringCells([cell, row], options, ([cell, row]) => {
-        if (field[row][cell][0] >= 0) {
-          field[row][cell][0] = countMine(field, [cell, row], options)
+        const x = Number(cell)
+        const y = Number(row)
+        if (field[y][x][0] >= 0) {
+          field[y][x][0] = countMine(field, [cell, row], options)
         }
       })
     }
