@@ -65,7 +65,6 @@ export class IndexedDB<ObjectStore extends DB> {
 
       return new Promise((resolve, reject) => {
         request.onsuccess = (event) => {
-          console.log('Grid stored successfully with ID:', (event.target as IDBRequest).result)
           resolve((event.target as IDBRequest).result as number)
         }
 
@@ -88,12 +87,10 @@ export class IndexedDB<ObjectStore extends DB> {
       const request = objectStore.get(id)
 
       return new Promise((resolve, reject) => {
-        request.onsuccess = (event) => {
+        request.onsuccess = () => {
           if (request.result) {
-            console.log('Retrieved grid:', request.result, event)
             resolve(request.result)
           } else {
-            console.log('Grid not found')
             resolve(null)
           }
         }
@@ -108,14 +105,14 @@ export class IndexedDB<ObjectStore extends DB> {
     }
   }
 
-  public async updateObj({ id, ...data }: ObjectStore): Promise<boolean> {
+  public async updateObj(data: ObjectStore): Promise<boolean> {
     try {
       const db = await this.ensureDb() // Ensure DB is opened and non-null
 
       const transaction = db.transaction([this.tableName], 'readwrite')
       const objectStore = transaction.objectStore(this.tableName)
 
-      const existingRecordRequest = objectStore.get(id)
+      const existingRecordRequest = objectStore.get(data.id)
 
       return new Promise((resolve, reject) => {
         existingRecordRequest.onsuccess = (event) => {
@@ -123,7 +120,6 @@ export class IndexedDB<ObjectStore extends DB> {
             const updateRequest = objectStore.put(data)
 
             updateRequest.onsuccess = () => {
-              console.log(`Grid with ID ${id} updated successfully.`, event)
               resolve(true)
             }
 
@@ -132,7 +128,7 @@ export class IndexedDB<ObjectStore extends DB> {
               reject((event.target as IDBRequest).error)
             }
           } else {
-            console.log('Grid not found, cannot update')
+            console.log('id not found, cannot update')
             resolve(false)
           }
         }
