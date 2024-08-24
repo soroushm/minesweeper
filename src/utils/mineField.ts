@@ -2,7 +2,6 @@ import { v7 } from 'uuid'
 import {
   generateMinesweeperGrid,
   type Options as GenerateOptions,
-  type Cell,
   type Position,
   type Actions,
   type Board,
@@ -16,10 +15,7 @@ export interface Update {
   position: Position
   actions: Actions
 }
-interface Change {
-  cell: Cell
-  position: Position
-}
+
 class MineField {
   private db = new IndexedDB<Board>('MinesweeperDB', 'minesweeperGrids')
 
@@ -31,7 +27,7 @@ class MineField {
       start: null,
       end: null,
     }
-    const result = await this.db.addObj(board)
+    await this.db.addObj(board)
     return {
       ...board,
       field: board?.field.map((row) => row.map((cell) => transformCellForClient(cell))),
@@ -45,15 +41,24 @@ class MineField {
       throw new Error('Position is required')
     }
     if (board.end) {
-      console.log('game over', position, actions, board, newBord)
-      // @todo update board
       throw new Error('Game is over')
     } else if (!board.start) {
       newBord.start = new Date().toISOString()
       newBord.field = generateMinesweeperGrid(board.options, position, actions)
     }
-    //@todo handle actions
-    newBord.field = revealMinesweeperGrid(newBord.field, board.options, position)
+    //@todo win scenario
+
+    const [revealed, flag] = actions
+    const [selectedCell, selectedRow] = position
+    if (revealed) {
+      newBord.field = revealMinesweeperGrid(newBord.field, board.options, position)
+      const isHitMine = newBord.field[selectedRow][selectedCell][0] === -1
+      if (isHitMine) {
+        newBord.end = new Date().toISOString()
+      }
+    } else if (flag !== null) {
+      newBord.field[selectedRow][selectedCell][2] = flag
+    }
 
     await this.db.updateObj(newBord)
     newBord.field = newBord?.field.map((row) => row.map((cell) => transformCellForClient(cell)))

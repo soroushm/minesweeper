@@ -19,10 +19,9 @@ export const revealMinesweeperGrid = (field: Field, options: Options, [x, y]: Po
   // Reveal the cell
   field[row][cell][1] = true
 
-  // If the cell is a mine, reveal the mine and end the game
+  // Game over
   if (cellData[0] === -1) {
-    //@todo handle end scenario
-    throw new Error('Game Over! You hit a mine!')
+    return field
   }
 
   // If the cell has 0 mine around, recursively reveal around cells
