@@ -7,10 +7,10 @@ import {
   type Actions,
   type Board,
 } from './generateMinesweeperGrid'
-import { IndexedDB } from '../service/db/IndexedDB.ts'
-import { transformCellForClient } from './transformFieldForClient.ts'
+import { IndexedDB } from '../service/db/IndexedDB'
+import { transformCellForClient } from './transformFieldForClient'
 import { isEmpty } from './isEmpty.ts'
-import { revealMinesweeperGrid } from './revealMinesweeperGrid.ts'
+import { revealMinesweeperGrid } from './revealMinesweeperGrid'
 
 export interface Update {
   position: Position
@@ -29,9 +29,9 @@ class MineField {
       options,
       field: generateMinesweeperGrid(options),
       start: null,
+      end: null,
     }
     const result = await this.db.addObj(board)
-    console.log('res', result, board)
     return {
       ...board,
       field: board?.field.map((row) => row.map((cell) => transformCellForClient(cell))),
@@ -44,18 +44,19 @@ class MineField {
     if (position[0] === undefined || position[1] === undefined) {
       throw new Error('Position is required')
     }
-    const row = Number(position[0])
-    const cell = Number(position[1])
-    if (!board.start) {
+    if (board.end) {
+      console.log('game over', position, actions, board, newBord)
+      // @todo update board
+      throw new Error('Game is over')
+    } else if (!board.start) {
       newBord.start = new Date().toISOString()
       newBord.field = generateMinesweeperGrid(board.options, position, actions)
-      return newBord
-    } else {
-      //@todo handle actions
-      newBord.field = revealMinesweeperGrid(newBord.field, board.options, [cell, row])
     }
+    //@todo handle actions
+    newBord.field = revealMinesweeperGrid(newBord.field, board.options, position)
 
     await this.db.updateObj(newBord)
+    newBord.field = newBord?.field.map((row) => row.map((cell) => transformCellForClient(cell)))
     return newBord
   }
 
