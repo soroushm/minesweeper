@@ -1,71 +1,92 @@
 import { getRandomInt } from './getRandomInt'
+import { toNumber } from './toNumber'
+import { processNeighboringCells } from './processNeighboringCells.ts'
+import { revealMinesweeperGrid } from './revealMinesweeperGrid.ts'
+import { Cell } from '../components/board/Cell.jsx'
+
+export type HasRevealed = boolean
+export type HasFlag = boolean
+export type MinesCount = number // -1 | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8
+export type X = string | number
+export type Y = string | number
+export type Cell = [MinesCount, HasRevealed, HasFlag]
+export type Field = Cell[][]
+export type Position = [X, Y]
+export type Actions = [HasRevealed, HasFlag]
 export interface Options {
   rows: number
   cells: number
   mines: number
 }
-export const generateMinesweeperGrid = ({
-  cells = 9,
-  rows = 9,
-  mines = 8,
-}: Options) => {
-  // Create the grid initialized with zeros
-  const grid: number[][] = Array.from({ length: rows }, () =>
-    Array(cells).fill(0),
-  )
+export interface Board {
+  id: string
+  options: Options
+  field: Field
+  start: string | null
+  end: string | null
+}
 
-  // Function to get random integer between min and max (inclusive)
+export const countMine = (field: Field, [cell, row]: Position, options: Options): number => {
+  let mineCount = 0
+  processNeighboringCells([cell, row], options, ([selectedCell, selectedRow]) => {
+    const x = Number(selectedCell)
+    const y = Number(selectedRow)
+    const isMine = field[y][x][0] === -1
+    if (isMine) {
+      mineCount++
+    }
+  })
+  return mineCount
+}
+export const createField = (rows: number, cells: number): Field => {
+  // Create the grid initialized with [zeros as mineCount, false as isRevealed, flagState]
+  return Array.from({ length: rows }, () => {
+    return Array.from({ length: cells }, () => [0, false, false])
+  })
+}
+export const generateMinesweeperGrid = (
+  options: Options,
+  [x, y]: Position | [] = [],
+  [hasRevealed, hasFlag]: Actions | [] = [],
+) => {
+  const cells = Number(options.cells)
+  const rows = Number(options.rows)
+  const mines = Number(options.mines)
+  const field = createField(rows, cells)
+  const isSelectedCellExist = !((x == null && y == null) || x === '' || y === '')
+  if (!isSelectedCellExist) {
+    return field
+  }
+  // Assign mine to cells
+  const numX = toNumber(x)
+  const numY = toNumber(y)
+
+  const selectedCell = field[numY][numX]
+  const hasSelectedCell = Array.isArray(selectedCell)
+  if (hasSelectedCell && hasFlag != null) {
+    field[numY][numX][2] = hasFlag // flagged
+  }
 
   // Place mines
   let minesPlaced = 0
   while (minesPlaced < mines) {
     const row = getRandomInt(0, rows - 1)
     const cell = getRandomInt(0, cells - 1)
-
-    if (grid[row][cell] !== -1) {
+    const isSelectedCell = row === numY || cell === numX
+    const isMine = field[row][cell][0] === -1
+    if (!isSelectedCell && !isMine) {
       // Ensure we don't place more than one mine in a cells
-      grid[row][cell] = -1
-      minesPlaced++
-    }
-  }
-
-  // Directions for adjacent cells (8 directions)
-  const directions = [
-    [-1, -1],
-    [-1, 0],
-    [-1, 1],
-    [0, -1],
-    [0, 1],
-    [1, -1],
-    [1, 0],
-    [1, 1],
-  ]
-
-  // Update counts around mines
-  for (let row = 0; row < rows; row++) {
-    for (let cell = 0; cell < cells; cell++) {
-      if (grid[row][cell] === -1) continue // Skip mines
-
-      // Count mines in adjacent cells
-      let mineCount = 0
-      for (const [dx, dy] of directions) {
-        const selectedRow = row + dx
-        const selectedCell = cell + dy
-
-        if (
-          selectedRow >= 0 &&
-          selectedRow < rows &&
-          selectedCell >= 0 &&
-          selectedCell < cells
-        ) {
-          if (grid[selectedRow][selectedCell] === -1) {
-            mineCount++
-          }
+      field[row][cell][0] = -1
+      ++minesPlaced
+      processNeighboringCells([cell, row], options, ([cell, row]) => {
+        const x = Number(cell)
+        const y = Number(row)
+        if (field[y][x][0] >= 0) {
+          field[y][x][0] = countMine(field, [cell, row], options)
         }
-      }
-      grid[row][cell] = mineCount
+      })
     }
   }
 
-  return grid
+  return !hasRevealed ? field : revealMinesweeperGrid(field, options, [numX, numY])
 }

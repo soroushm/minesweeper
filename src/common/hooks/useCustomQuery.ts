@@ -1,33 +1,27 @@
-import {
-  useQuery,
-  type UseQueryOptions,
-  type UseQueryResult,
-} from '@tanstack/react-query'
-import defaultClient, {
-  Client,
-  type RequestConfig,
-} from '../../utils/api/client'
+import { useQuery } from '@tanstack/react-query'
+import defaultClient, { Client, type RequestConfig } from '../../utils/api/client'
 
 interface UseCustomQueryParams {
   queryKey: Array<string | number>
   config: RequestConfig
-  options?: Omit<UseQueryOptions, 'queryKey' | 'queryFn'>
+  options?: any
   client?: Client
 }
 
-export const useCustomQuery = ({
+export const useCustomQuery = <TData>({
   queryKey,
-  config = {},
+  config,
   options = {},
-  client = defaultClient,
-}: UseCustomQueryParams): UseQueryResult => {
-  return useQuery({
+  client,
+}: UseCustomQueryParams) => {
+  const defaultOptions = {
+    staleTime: Infinity,
+  }
+  return useQuery<TData>({
+    // ...(options || {}),
     ...options,
-    queryKey: [
-      ...queryKey,
-      config,
-      // client.host (if needed)
-    ],
-    queryFn: async () => client.call({ ...config }),
+    ...defaultOptions,
+    queryKey,
+    queryFn: async () => (client || defaultClient).call<TData>({ ...(config || {}) }),
   })
 }

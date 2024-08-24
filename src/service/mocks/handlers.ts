@@ -1,2 +1,2 @@
-import { board } from './api'
-export const handlers = [board]
+import { newBoard, updateBoard, getBoard } from './api'
+export const handlers = [newBoard, updateBoard, getBoard]
