@@ -63,12 +63,14 @@ jobs:
         run: ${{ steps.detect-package-manager.outputs.runner }} npm run build
 
       - name: Upload artifact
+        if: github.event_name == 'push'
         uses: actions/upload-pages-artifact@v2
         with:
           path: ./build
 
   # Deployment job
   deploy:
+    if: github.event_name == 'push'
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
