@@ -3,7 +3,7 @@ import { Display } from '../../common/components/Display'
 export const MinesCounter = () => {
   return (
     <div className="minesCounter">
-      <Display digits="010" />
+      <Display display="10" initValue="0" />
     </div>
   )
 }
