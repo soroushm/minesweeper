@@ -15,7 +15,7 @@ export const Board = () => {
       <div className="header">
         <MinesCounter />
         <Observer />
-        <TimerCounter />
+        <TimerCounter start={data?.start} end={data?.end} />
       </div>
       <MineField key={data?.id} data={data || {}} />
     </div>
