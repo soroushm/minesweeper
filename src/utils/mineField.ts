@@ -35,7 +35,7 @@ class MineField {
     await this.db.addObj(board)
     return {
       ...board,
-      field: board?.field.map((row) => row.map((cell) => transformCellForClient(cell))),
+      field: board?.field.map((row) => row.map((cell) => transformCellForClient(cell, false))),
     }
   }
 
