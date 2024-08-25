@@ -57,9 +57,10 @@ class MineField {
     const [selectedCell, selectedRow] = position
     const x = Number(selectedCell)
     const y = Number(selectedRow)
+    let isHitMine = false
     if (revealed) {
       newBord.field = revealMinesweeperGrid(newBord.field, board.options, position)
-      const isHitMine = newBord.field[y][x][0] === -1
+      isHitMine = newBord.field[y][x][0] === -1
       if (isHitMine) {
         newBord.end = new Date().toISOString()
       }
@@ -68,7 +69,9 @@ class MineField {
     }
 
     await this.db.updateObj(newBord)
-    newBord.field = newBord?.field.map((row) => row.map((cell) => transformCellForClient(cell)))
+    newBord.field = newBord?.field.map((row) =>
+      row.map((cell) => transformCellForClient(cell, isHitMine)),
+    )
     return newBord
   }
 
@@ -77,9 +80,10 @@ class MineField {
     if (isEmpty(board)) {
       return {}
     }
+    const isGameOver = board.start != null && board.end != null
     return {
       ...board,
-      field: board?.field.map((row) => row.map((cell) => transformCellForClient(cell))),
+      field: board?.field.map((row) => row.map((cell) => transformCellForClient(cell, isGameOver))),
     }
   }
 }
