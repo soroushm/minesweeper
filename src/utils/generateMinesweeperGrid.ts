@@ -1,8 +1,8 @@
 import { getRandomInt } from './getRandomInt'
 import { toNumber } from './toNumber'
-import { processNeighboringCells } from './processNeighboringCells.ts'
-import { revealMinesweeperGrid } from './revealMinesweeperGrid.ts'
-import { Cell } from '../components/board/Cell.jsx'
+import { processNeighboringCells } from './processNeighboringCells'
+import { revealMinesweeperGrid } from './revealMinesweeperGrid'
+import { Cell } from '../components/board/Cell'
 
 export type HasRevealed = boolean
 export type HasFlag = boolean
