@@ -3,10 +3,7 @@ import { MineField } from './MineField'
 import { MinesCounter } from './MinesCounter'
 import { TimerCounter } from './TimerCounter'
 import { useBoard } from '../../common/hooks/useBoard'
-
-function Observer() {
-  return null
-}
+import { ObserverFace } from './ObserverFace'
 
 export const Board = () => {
   const { data } = useBoard()
@@ -14,7 +11,7 @@ export const Board = () => {
     <div className="board">
       <div className="header">
         <MinesCounter />
-        <Observer />
+        <ObserverFace board={data} />
         <TimerCounter start={data?.start} end={data?.end} />
       </div>
       <MineField key={data?.id} data={data || {}} />

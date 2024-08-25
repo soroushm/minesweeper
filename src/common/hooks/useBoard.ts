@@ -4,8 +4,16 @@ import { useBoardQuery } from './useBoardQuery.ts'
 
 export const useBoard = (options?: Options) => {
   const [id, setId] = useState<string>('new')
-
   const result = useBoardQuery(id, options)
+  // const queryClient = useQueryClient()
+  // const changeBoard = useCallback(
+  //   async (id: string) => {
+  //     await queryClient.invalidateQueries({ queryKey: ['board', id] })
+  //     setId(id)
+  //   },
+  //   [id, result?.data?.id, queryClient],
+  // )
+
   useEffect(() => {
     if (!result.isFetched) {
       return

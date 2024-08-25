@@ -5,7 +5,7 @@ interface SevenSegment {
   height?: number
   characters: string
 }
-export const SevenSegment = ({ width = 24, height = 48, characters }: SevenSegment) => {
+export const SevenSegment = ({ width = 20, height = 40, characters }: SevenSegment) => {
   const [top, middle, bottom, rightTop, rightBottom, leftTop, leftBottom] =
     segmentMap[characters as keyof typeof segmentMap] || segmentMap.default
   return (
