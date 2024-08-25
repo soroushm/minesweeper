@@ -1,4 +1,4 @@
-import { server } from './server`'
+import { server } from './server'
 
 describe('MSW server', () => {
   it('to be defined', async () => {
