@@ -18,7 +18,7 @@ export const useBoard = (options?: Options) => {
     if (!result.isFetched) {
       return
     }
-    if (result?.data?.id && id !== result?.data?.id) {
+    if (result?.data?.id && id !== null && id !== result?.data?.id) {
       setId(result.data.id)
     }
   }, [result?.data?.id, result.isFetched])

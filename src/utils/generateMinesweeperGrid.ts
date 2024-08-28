@@ -72,7 +72,7 @@ export const generateMinesweeperGrid = (
   while (minesPlaced < mines) {
     const row = getRandomInt(0, rows - 1)
     const cell = getRandomInt(0, cells - 1)
-    const isSelectedCell = row === numY || cell === numX
+    const isSelectedCell = row === numY && cell === numX
     const isMine = field[row][cell][0] === -1
     if (!isSelectedCell && !isMine) {
       // Ensure we don't place more than one mine in a cells
