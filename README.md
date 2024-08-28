@@ -1,3 +1,7 @@
+[![License: Prosperity Public License](https://img.shields.io/badge/license-Prosperity%203.0-blue.svg)](https://licensezero.com/licenses/prosperity-3.0)
+
+# Minesweeper
+
 # React + TypeScript + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.

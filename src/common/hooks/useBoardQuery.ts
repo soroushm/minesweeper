@@ -8,7 +8,7 @@ const defaultParams = {
 }
 export const useBoardQuery = (id: string, params: Params = defaultParams) => {
   const config = {
-    url: `/board/${id}`,
+    url: `/board/${id || 'new'}`,
     method: 'get',
     params,
   }

@@ -1,8 +1,9 @@
 {
-  "name": "react-boilerplate",
+  "name": "minesweeper",
   "private": true,
   "version": "0.1.0",
   "type": "module",
+  "license": "Prosperity-3.0",
   "keywords": [],
   "description": "",
   "scripts": {

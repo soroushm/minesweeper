@@ -3,11 +3,11 @@ import { segmentMap } from '../consts'
 interface SevenSegment {
   width?: number
   height?: number
-  digit: string
+  characters: string
 }
-export const SevenSegment = ({ width = 24, height = 48, digit }: SevenSegment) => {
+export const SevenSegment = ({ width = 20, height = 40, characters }: SevenSegment) => {
   const [top, middle, bottom, rightTop, rightBottom, leftTop, leftBottom] =
-    segmentMap[digit as keyof typeof segmentMap] || segmentMap.default
+    segmentMap[characters as keyof typeof segmentMap] || segmentMap.default
   return (
     <div className="seven-segment">
       <svg

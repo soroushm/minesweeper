@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react'
+import { useCallback } from 'react'
 import { useBoardMutation } from '../../common/hooks/useBoardMutation'
 
 export const Cell = ({ cell: [value, isRevealed, isFlagged], position }) => {
@@ -19,8 +19,10 @@ export const Cell = ({ cell: [value, isRevealed, isFlagged], position }) => {
   )
   const isMine = value === -1
   let val = ''
-  if (isFlagged) {
+  if (isMine && isFlagged) {
     val = '🏴‍☠️'
+  } else if (isFlagged) {
+    val = '🚩'
   } else if (isMine) {
     val = isRevealed ? '💥' : '💣'
   } else if (value > 0) {
@@ -29,7 +31,7 @@ export const Cell = ({ cell: [value, isRevealed, isFlagged], position }) => {
 
   return (
     <div
-      className={`cell ${isRevealed && 'revealed'}`}
+      className={`cell ${(isRevealed || isMine) && 'revealed'}`}
       onClick={(event) => onclick(event, true, isFlagged)}
       onContextMenu={(event) => onclick(event, isRevealed, !isFlagged)}
     >
