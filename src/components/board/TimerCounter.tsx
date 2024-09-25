@@ -10,6 +10,7 @@ export const TimerCounter = ({ start, end }: TimerCounter) => {
   const [timeDifference, setTimeDifference] = useState<number>(0)
   useEffect(() => {
     if (start == null) {
+      setTimeDifference(0)
       return
     }
     const intervalId = setInterval(() => {

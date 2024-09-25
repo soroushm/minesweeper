@@ -51,7 +51,6 @@
   background-color: #ddd;
   align-items: center;
   justify-content: center;
-  color: #000;
   font-weight: bold;
   padding: 0;
   margin: 0;
@@ -61,4 +60,30 @@
   transition: 250ms;
   background-color: #ccc;
   border: 2px solid #bbb;
+}
+
+.cell-1 {
+  color: #2f0cdb;
+}
+.cell-2 {
+  color: #47731b;
+}
+.cell-3 {
+  color: #c71d0a;
+}
+.cell-4 {
+  color: #19046c;
+}
+.cell-5 {
+  color: #5e0a05;
+}
+.cell-6 {
+  color: #487f7f;
+}
+.cell-7,
+.cell--1 {
+  color: #000000;
+}
+.cell-8 {
+  color: #6f6f6f;
 }
