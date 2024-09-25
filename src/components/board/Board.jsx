@@ -12,13 +12,13 @@ export const Board = () => {
     rows: 9,
     mines: 10,
   }
-  const { data, isFetched } = useBoard(options)
+  const [{ data, isFetched }, changeBoard] = useBoard(options)
   const field = !isFetched && generateMinesweeperGrid(options)
   return (
     <div className="board">
       <div className="header">
         <MinesCounter />
-        <ObserverFace board={data} />
+        <ObserverFace board={data} changeBoard={changeBoard} />
         <TimerCounter start={data?.start} end={data?.end} />
       </div>
       <MineField key={data?.id || 'new'} data={isFetched ? data : { field, id: 'new' }} />

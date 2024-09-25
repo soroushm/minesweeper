@@ -4,7 +4,7 @@ import { useBoard } from './useBoard'
 import { type Board } from '../../utils/generateMinesweeperGrid'
 
 export const useBoardMutation = () => {
-  const { data: board } = useBoard()
+  const [{ data: board }] = useBoard()
   const config = {
     url: `/board/${board?.id}`,
     method: 'post',
