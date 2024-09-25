@@ -8,7 +8,7 @@ interface UseCustomQueryParams {
   client?: Client
 }
 
-export const useCustomQuery = <TData>({
+export const useCustomQuery = <TData, TransformData>({
   queryKey,
   config,
   options = {},
@@ -22,6 +22,7 @@ export const useCustomQuery = <TData>({
     ...options,
     ...defaultOptions,
     queryKey,
-    queryFn: async () => (client || defaultClient).call<TData>({ ...(config || {}) }),
+    queryFn: async () =>
+      (client || defaultClient).call<TData, TransformData>({ ...(config || {}) }),
   })
 }

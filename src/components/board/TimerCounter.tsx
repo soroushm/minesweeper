@@ -1,12 +1,14 @@
+import { FC } from 'react'
 import { Display } from '../../common/components/Display'
 import { calculateTimeDifferenceInSeconds } from '../../utils/calculateTimeDifferenceInSeconds.js'
 import { useEffect, useState } from 'react'
 
 interface TimerCounter {
-  start: string
-  end?: string
+  start?: string | null
+  end?: string | null
 }
-export const TimerCounter = ({ start, end }: TimerCounter) => {
+
+export const TimerCounter: FC<TimerCounter> = ({ start, end }) => {
   const [timeDifference, setTimeDifference] = useState<number>(0)
   useEffect(() => {
     if (start == null) {

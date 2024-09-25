@@ -12,7 +12,7 @@ export const useBoardQuery = (id: string, params: Params = defaultParams) => {
     method: 'get',
     params,
   }
-  return useCustomQuery<Board>({
+  return useCustomQuery<Board, Board>({
     queryKey: ['board', id],
     config,
   })
