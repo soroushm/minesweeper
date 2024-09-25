@@ -1,4 +1,7 @@
-export const calculateTimeDifferenceInSeconds = (startDate: string, endDate?: string): number => {
+export const calculateTimeDifferenceInSeconds = (
+  startDate: string,
+  endDate?: string | null,
+): number => {
   const startTime = new Date(startDate)
   const endTime = endDate != null ? new Date(endDate) : new Date()
 

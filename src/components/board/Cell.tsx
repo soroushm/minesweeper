@@ -1,36 +1,40 @@
-import { useCallback, useState } from 'react'
+import { useCallback, useState, FC, TouchEventHandler } from 'react'
 import { useBoardMutation } from '../../common/hooks/useBoardMutation'
+import { type Cell as CellT } from '../../utils/generateMinesweeperGrid'
 
-export const Cell = ({ cell: [value, isRevealed, isFlagged], position }) => {
+interface CellProps {
+  cell: CellT
+  position: { x: number; y: number }
+}
+
+export const Cell: FC<CellProps> = ({ cell: [value, isRevealed, isFlagged], position }) => {
   const { mutate } = useBoardMutation()
-  const [pressTimer, setPressTimer] = useState(null)
+  const [pressTimer, setPressTimer] = useState<NodeJS.Timeout | undefined>(undefined)
 
   const onclick = useCallback(
-    (event, hasRevealed = false, hasFlagged = false) => {
-      event.preventDefault()
+    (hasRevealed = false, hasFlagged = false) => {
       if (isRevealed || (isFlagged && isFlagged === hasFlagged)) {
         return
       }
-      const actions = [hasRevealed, hasFlagged]
       mutate({
         position: [position.x, position.y],
-        actions,
+        actions: [hasRevealed, hasFlagged],
       })
     },
     [isRevealed, isFlagged, position, mutate],
   )
 
-  const handleTouchStart = (event) => {
+  const handleTouchStart: TouchEventHandler<HTMLDivElement> = () => {
     // Set a timer for the long press (right-click equivalent on mobile)
     const timerId = setTimeout(() => {
-      onclick(event, isRevealed, !isFlagged)
+      onclick(isRevealed, !isFlagged)
     }, 800) // Long press duration
     setPressTimer(timerId)
   }
 
   const handleTouchEnd = () => {
-    clearTimeout(pressTimer)
-    setPressTimer(null)
+    pressTimer && clearTimeout(pressTimer)
+    setPressTimer(undefined)
   }
 
   const isMine = value === -1
@@ -42,14 +46,17 @@ export const Cell = ({ cell: [value, isRevealed, isFlagged], position }) => {
   } else if (isMine) {
     val = isRevealed ? '💥' : '💣'
   } else if (value > 0) {
-    val = value
+    val = value.toString()
   }
 
   return (
     <div
       className={`cell ${(isRevealed || isMine) && 'revealed'} cell-${value}`}
-      onClick={(event) => onclick(event, true, isFlagged)}
-      onContextMenu={(event) => onclick(event, isRevealed, !isFlagged)}
+      onClick={() => onclick(true, isFlagged)}
+      onContextMenu={(event) => {
+        event.preventDefault()
+        onclick(isRevealed, !isFlagged)
+      }}
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
     >

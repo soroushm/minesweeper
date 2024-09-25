@@ -2,7 +2,6 @@ import { getRandomInt } from './getRandomInt'
 import { toNumber } from './toNumber'
 import { processNeighboringCells } from './processNeighboringCells'
 import { revealMinesweeperGrid } from './revealMinesweeperGrid'
-import { Cell } from '../components/board/Cell'
 
 export type HasRevealed = boolean
 export type HasFlag = boolean

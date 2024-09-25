@@ -22,5 +22,5 @@ export const useBoard = (options?: Options) => {
     }
   }, [result?.data?.id, result.isFetched, id])
 
-  return [result, changeBoard]
+  return { result, changeBoard }
 }
